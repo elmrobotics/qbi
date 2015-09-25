@@ -1,5 +1,7 @@
 # Qbi Demo #
 
+##QBI-1 Branch##
+
 This repository contains the LinkIT and Arduino code running on the Qbi and ActionHub demo units.
 
 [Setting up Qbi 1 - Video](https://www.youtube.com/watch?v=S4AbExmMUKg)
