@@ -16,8 +16,8 @@
 // Qbi LED GROUP
 #define LED_FANON 3
 #define LED_FANOFF 1
-#define LED_LIGHTON 4
-#define LED_LIGHTOFF 2
+#define LED_LIGHTON 2
+#define LED_LIGHTOFF 4
 #define LED_QBIUP 5
 #define LED_QBIDOWN 5
 
@@ -30,7 +30,7 @@
 #define CMD_QBIDOWN "qbiup"
 
 // WiFi
-#define WIFI_AP "LinkItONEQbiA"
+#define WIFI_AP "LinkItONEQbiB"
 #define WIFI_PASSWORD "LinkItONE"
 #define WIFI_AUTH LWIFI_WPA    // LWIFI_OPEN, LWIFI_WPA, LWIFI_WEP
 #define ACTIONHUB_URL "192.168.1.43"
@@ -96,13 +96,13 @@ void loop() {
   int startChangeTime = 0;
   acc.get(&ax,&ay,&az);             // get value from accelemeter
   if (ax < -n1 && (abs(ay) + abs(az)) < n2) {        // X Up
-    readFace = S_FANON;
-  } else if (ax > n1 && (abs(ay) + abs(az)) < n2) {  // X Down
-    readFace = S_FANOFF;
-  } else if (ay < -n1 && (abs(az) + abs(ax)) < n2) { // Y Up
-    readFace = S_LIGHTOFF;
-  } else if (ay > n1 && (abs(az) + abs(ax)) < n2) {  // Y Down
     readFace = S_LIGHTON;
+  } else if (ax > n1 && (abs(ay) + abs(az)) < n2) {  // X Down
+    readFace = S_LIGHTOFF;
+  } else if (ay < -n1 && (abs(az) + abs(ax)) < n2) { // Y Up
+    readFace = S_FANON;
+  } else if (ay > n1 && (abs(az) + abs(ax)) < n2) {  // Y Down
+    readFace = S_FANOFF;
   } else if (az < -n1 && (abs(ay) + abs(ax)) < n2) { // Z Up
     readFace = S_QBIDOWN;
   } else if (az > n1 && (abs(ay) + abs(ax)) < n2) {  // Z Down
@@ -180,7 +180,7 @@ void sendCommandToActionHub(String cmd) {
 }
 
 void printWifiStatus() {
-  IPAddress ip = LWiFi.localIP();\
+  IPAddress ip = LWiFi.localIP();
   
   // print the SSID of the network you're attached to:
   Serial.print("SSID: ");

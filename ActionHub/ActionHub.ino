@@ -1,6 +1,5 @@
 /* ActionHub - Qbi Appliance Control Server */
 /* By: Elm Robotics - 2015 */
-#include <Wire.h>
 #include <LTask.h>
 #include <LWiFi.h>
 #include <LWiFiServer.h>
@@ -8,7 +7,7 @@
 
 #define DEBUG false 
 
-#define WIFI_AP "LinkItONEQbiA"
+#define WIFI_AP "LinkItONEQbiB"
 #define WIFI_PASSWORD "LinkItONE"
 #define WIFI_AUTH LWIFI_WPA  // choose from LWIFI_OPEN, LWIFI_WPA, or LWIFI_WEP according to your WiFi AP configuration
 
@@ -18,14 +17,9 @@
 #define FAN_ON "fanon"
 #define FAN_OFF "fanoff"
 #define QBI_UP "qbiup"
-// Utility Commands (byte)
-#define U_LIGHT_ON 11
-#define U_LIGHT_OFF 12
-#define U_FAN_ON 13
-#define U_FAN_OFF 14
-
-#define LIGHT_PIN 3
-#define FAN_PIN 4
+// On/Off Pins
+#define LIGHT_PIN 12
+#define FAN_PIN 11
 
 LWiFiServer server(80);
 
@@ -34,7 +28,10 @@ void setup()
   LTask.begin();
   LWiFi.begin();
   
-  Wire.begin();   // For I2C Communication with Trinket
+  pinMode(LIGHT_PIN, OUTPUT);
+  pinMode(FAN_PIN, OUTPUT);
+  digitalWrite(LIGHT_PIN, LOW);
+  digitalWrite(FAN_PIN, LOW);
 
   Serial1.begin(9600); // LCD
   
@@ -97,19 +94,19 @@ void loop() {
             client.println("{ success: true }");
             client.println();
             if (command == LIGHT_ON){
-              sendMsgToActionHubUtil(U_LIGHT_ON);
+              digitalWrite(LIGHT_PIN, HIGH);
               Serial1.print("ActionHub\r\n");
               Serial1.print("Light On");
             } else if (command == LIGHT_OFF) {
-              sendMsgToActionHubUtil(U_LIGHT_OFF);
+              digitalWrite(LIGHT_PIN, LOW);
               Serial1.print("ActionHub\r\n");
               Serial1.print("Light Off");
             } else if (command == FAN_ON) {
-              sendMsgToActionHubUtil(U_FAN_ON);
+              digitalWrite(FAN_PIN, HIGH);
               Serial1.print("ActionHub\r\n");
               Serial1.print("Fan On");
             } else if (command == FAN_OFF) {
-              sendMsgToActionHubUtil(U_FAN_OFF);
+              digitalWrite(FAN_PIN, LOW);
               Serial1.println("ActionHub\r\n");
               Serial1.print("Fan Off");
             } else if (command == QBI_UP) {
@@ -140,16 +137,6 @@ void loop() {
       Serial.println("Connection Closed");
 #endif
    }
-}
-
-void sendMsgToActionHubUtil(byte x) {
-#if DEBUG
-  Serial.print("Sending: ");
-  Serial.println(x);
-#endif
-  Wire.beginTransmission(9); // transmit to device #9 (Trinket)
-  Wire.write(x);              // sends x 
-  Wire.endTransmission();    // stop transmitting
 }
 
 void printWifiStatus() {
