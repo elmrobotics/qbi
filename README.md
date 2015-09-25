@@ -1,5 +1,7 @@
 # Qbi Demo #
 
+## Qbi Version 2 ##
+
 This repository contains the LinkIT and Arduino code running on the Qbi and ActionHub demo units.
 
 [Setting up Qbi 1 - Video](https://www.youtube.com/watch?v=S4AbExmMUKg)
@@ -21,6 +23,4 @@ This repository contains the LinkIT and Arduino code running on the Qbi and Acti
 
 ### ActionHubUtil ###
 
-* Adafruit Trinket Pro 5 volt 
-* Used as a control unit for the 2 poder relays (opperating at 5 Volts)
-* I2C used for communication
+Not used for second version of Qbi.  Instead a simple transistor circuit was used for upping the current to the relays from the Linkit ONE
